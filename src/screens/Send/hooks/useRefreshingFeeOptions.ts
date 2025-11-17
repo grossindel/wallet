@@ -55,7 +55,11 @@ export const useRefreshingFeeOptions = (wallet: RealmWallet, refreshInBackground
     if (!interval) {
       interval = setInterval(refreshEstimate, refreshPeriodInSeconds * 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval as unknown as NodeJS.Timeout);
+      }
+    };
   }, [canRefresh, refreshPeriodInSeconds, fetchFeeOptions]);
 
   return {

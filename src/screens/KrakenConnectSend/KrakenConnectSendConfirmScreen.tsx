@@ -211,7 +211,7 @@ export const KrakenConnectSendConfirmScreen = ({ route, navigation }: KrakenConn
 
   return (
     <ExpandableSheet
-      ref={sheetRef}
+      ref={sheetRef as React.RefObject<ExpandableSheetMethods>}
       dismissible
       onDismiss={onDismiss}
       PreviewComponent={

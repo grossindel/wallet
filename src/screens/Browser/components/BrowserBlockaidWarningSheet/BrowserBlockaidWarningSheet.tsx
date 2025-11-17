@@ -15,7 +15,7 @@ interface Props {
 
 export const BrowserBlockaidWarningSheet: React.FC<Props> = ({ url }) => {
   const blockScreenRef = useRef<BottomSheetModalRef>(null);
-  const { ignoreWarning, navigateBack } = useBlockaidWarning(url, blockScreenRef);
+  const { ignoreWarning, navigateBack } = useBlockaidWarning(url, blockScreenRef as React.RefObject<BottomSheetModalRef>);
 
   return (
     <BlockScreenModal

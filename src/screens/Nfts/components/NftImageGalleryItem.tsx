@@ -150,13 +150,16 @@ export const NftImageGalleryItem = React.forwardRef<NftImageGalleryItemRef, NftI
 
     const pinch = Gesture.Pinch()
       .onStart(() => {
+        'worklet';
         scaleOffset.value = scale.value;
         toggleControls(false);
       })
       .onUpdate(event => {
+        'worklet';
         scale.value = scaleOffset.value * event.scale;
       })
       .onEnd(() => {
+        'worklet';
         if (scale.value > MAX_ZOOM_SCALE) {
           scale.value = withTiming(MAX_ZOOM_SCALE);
         }
@@ -170,15 +173,19 @@ export const NftImageGalleryItem = React.forwardRef<NftImageGalleryItemRef, NftI
 
     const pan = Gesture.Pan()
       .onStart(() => {
+        'worklet';
         translateXOffset.value = translateX.value;
         translateYOffset.value = translateY.value;
         toggleControls(false);
       })
       .onUpdate(event => {
+        'worklet';
         translateX.value = translateXOffset.value + event.translationX;
         translateY.value = translateYOffset.value + event.translationY;
       })
       .onEnd(event => {
+        'worklet';
+
         if (scale.value === scaleInfo.scaleContain) {
           const offset = Math.max(Math.abs(event.translationX), Math.abs(event.translationY));
           if (offset > DISMISS_OFFSET_THRESHOLD) {
@@ -226,11 +233,13 @@ export const NftImageGalleryItem = React.forwardRef<NftImageGalleryItemRef, NftI
       });
 
     const tap = Gesture.Tap().onEnd(() => {
+      'worklet';
       toggleControls(!controlsVisibility.value);
     });
 
     const doubleTap = Gesture.Tap()
       .onStart(() => {
+        'worklet';
         toggleControls(false);
         if (scale.value === scaleInfo.scaleContain) {
           scale.value = withTiming(scaleInfo.scaleCover);

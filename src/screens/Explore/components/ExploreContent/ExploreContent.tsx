@@ -21,7 +21,7 @@ const { Space } = Sizes;
 export const ContentWrapper = ({ marker, index, children }: PropsWithChildren<{ marker: string; index?: number }>) => {
   return (
     <ExploreRow index={index}>
-      <Animated.View key={marker} entering={FadeIn} exiting={FadeOut}>
+      <Animated.View key={marker} entering={FadeIn} exiting={FadeOut} pointerEvents="box-none">
         {children}
       </Animated.View>
     </ExploreRow>

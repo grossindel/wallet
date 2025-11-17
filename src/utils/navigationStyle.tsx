@@ -28,7 +28,6 @@ export const navigationStyle = ({
         color: theme.colors.light100,
       },
       headerRight: headerRight,
-      headerBackTitleVisible: false,
       headerTintColor: theme.colors.light100,
       ...opts,
     };

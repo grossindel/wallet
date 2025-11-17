@@ -98,7 +98,7 @@ const sectionListKeyExtractor = (item: SectionItem, index: number) => {
 
 const isIos = Platform.OS === 'ios';
 
-const DISTANCE_TO_RECENT_ACTIVITY = 320;
+const DISTANCE_TO_RECENT_ACTIVITY = 300;
 
 export const HomeAssetsPanel = ({ navigation }: HomeAssetsPanelProps) => {
   const tokens = useTokensFilteredByReputationAndNetwork([]);
@@ -250,6 +250,7 @@ export const HomeAssetsPanel = ({ navigation }: HomeAssetsPanelProps) => {
   );
 
   const defaultSnapPoints = useCommonSnapPoints('toHeaderAndMainContent');
+
   const { bottom } = useSafeAreaInsets();
 
   const minBottomSnapPoint = useMemo(() => {
@@ -271,7 +272,7 @@ export const HomeAssetsPanel = ({ navigation }: HomeAssetsPanelProps) => {
   useHomeAssetPanelEmitterListener(showRecentActivity);
 
   return (
-    <BottomSheet animateOnMount ref={bottomSheetRef} snapPoints={snapPoints} index={1} dismissible={false} noSafeInsetTop noBackdrop>
+    <BottomSheet noSafeInsetTop animateOnMount ref={bottomSheetRef} snapPoints={snapPoints} index={1} dismissible={false} noBackdrop>
       {showKrakenConnectCTA ? (
         <View style={styles.krakenConnectContainer}>
           <KrakenConnectFundCTA />
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   firstHeader: {
-    marginTop: 0,
+    marginTop: Platform.select({ ios: 28, default: 0 }),
     transform: [{ scale: 0 }],
   },
   krakenConnectContainer: {

@@ -3,47 +3,44 @@
 #import "SDImageCodersManager.h"
 #import <SDWebImageWebPCoder/SDImageWebPCoder.h>
 #import <React/RCTLinkingManager.h>
-
 #import <React/RCTBundleURLProvider.h>
+#import <RCTAppDependencyProvider.h>
 
+@interface AppDelegate ()
+@end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
-  self.moduleName = @"SuperWallet";
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
-
-  // for FastImage
+  // Configure FastImage WebP support before React Native initialization
   [SDImageCodersManager.sharedManager addCoder:SDImageWebPCoder.sharedCoder];
 
+  self.reactNativeFactory = [[RCTReactNativeFactory alloc] initWithDelegate:self];
+  self.dependencyProvider = [RCTAppDependencyProvider new];
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
+  [self.reactNativeFactory startReactNativeWithModuleName:@"SuperWallet"
+                                                 inWindow:self.window
+                                        initialProperties:[self prepareInitialProps]
+                                            launchOptions:launchOptions];
+
+  return YES;
 }
 
-- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifer
+- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier
 {
-  if (extensionPointIdentifer == UIApplicationKeyboardExtensionPointIdentifier) {
+  // Block keyboard extensions (custom security requirement)
+  if (extensionPointIdentifier == UIApplicationKeyboardExtensionPointIdentifier) {
     return NO;
   }
-
   return YES;
 }
 
 - (NSDictionary *)prepareInitialProps
 {
-  NSMutableDictionary *initProps = [NSMutableDictionary new];
-
-#ifdef RCT_NEW_ARCH_ENABLED
-  initProps[kRNConcurrentRoot] = @([self concurrentRootEnabled]);
-#endif
-
-  return initProps;
+  return @{};
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -54,13 +51,15 @@
 - (NSURL *)bundleURL
 {
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  return [RCTBundleURLProvider.sharedSettings jsBundleURLForBundleRoot:@"index"];
 #else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  return [NSBundle.mainBundle URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
 
-- (void)customizeRootView:(RCTRootView *)rootView {
+- (void)customizeRootView:(RCTRootView *)rootView
+{
+  [super customizeRootView:rootView];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
 }
 

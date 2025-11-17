@@ -23,7 +23,7 @@ export interface Props {
   coinType?: WalletType;
   maskShape?: typeof CIRCLE | typeof ROUNDED_SQUARE;
   maskPositionXYNudge?: number;
-  icon?: JSX.Element;
+  icon?: React.ReactElement;
   iconUri?: string;
   size?: number;
   style?: StyleProp<ViewStyle>;

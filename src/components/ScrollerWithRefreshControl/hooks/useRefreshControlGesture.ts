@@ -48,6 +48,7 @@ export const useRefreshControlGesture = (onRefresh: () => void, onScrollEvent?: 
         .minDistance(5)
         .failOffsetY(-1)
         .onChange(e => {
+          'worklet';
           const newValue = panValue.value + e.changeY;
           const progress = 1 / (newValue / stiffness);
           const interpolationFactor = Math.max(0, Math.min(progress, 1));
@@ -58,6 +59,7 @@ export const useRefreshControlGesture = (onRefresh: () => void, onScrollEvent?: 
           }
         })
         .onEnd(() => {
+          'worklet';
           panValue.value = withSpring(0, { overshootClamping: true });
           hasTriggered.value = false;
         }),

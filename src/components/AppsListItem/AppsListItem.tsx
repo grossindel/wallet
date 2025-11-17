@@ -12,7 +12,7 @@ type Props = {
   name: string;
   network: WalletType | '';
   onPress: () => void;
-  rightElement?: JSX.Element;
+  rightElement?: React.ReactElement;
   testID?: string;
 };
 

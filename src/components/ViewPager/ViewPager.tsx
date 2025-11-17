@@ -31,7 +31,7 @@ export const ViewPager: React.FC<ViewPagerProps> = ({ secondaryComponent, left, 
   });
 
   const onToggleTap = () => {
-    scrollRef.current?.scrollTo({ x: toggleState.value ? 0 : dimensions.width });
+    scrollRef.current?.scrollTo({ x: toggleState.value ? 0 : (dimensions.width ?? 0) });
     hapticFeedback.impactLight();
   };
   return (

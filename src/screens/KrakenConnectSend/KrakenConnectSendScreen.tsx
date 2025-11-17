@@ -1,8 +1,8 @@
-import { BottomSheetScrollView, type BottomSheetScrollViewMethods } from '@gorhom/bottom-sheet';
+import { BottomSheetFooter, type BottomSheetFooterProps, BottomSheetScrollView, type BottomSheetScrollViewMethods } from '@gorhom/bottom-sheet';
 import BigNumber from 'bignumber.js';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 
 import type { KrakenAssetSupported, KrakenWithdrawMethod } from '@/api/krakenConnect/types';
 import { AmountPercentageSelector, type PercentageOption } from '@/components/AmountPercentageSelector/AmountPercentageSelector';
@@ -115,7 +115,7 @@ const KrakenConnectSend = ({ navigation, route }: NavigationProps<'KrakenConnect
   };
   const showNetworkSelector = methods && methods?.length > 1;
 
-  const openConfirmationSheet = async () => {
+  const openConfirmationSheet = useCallback(async () => {
     const inputAmount = amountInputRef.current?.getAssetAmount();
     const inputAmountFiat = amountInputRef.current?.getFiatAmount();
     if (!inputAmount || !inputAmountFiat) {
@@ -126,7 +126,7 @@ const KrakenConnectSend = ({ navigation, route }: NavigationProps<'KrakenConnect
     if (withdrawMethod) {
       navigation.navigate(Routes.KrakenConnectSendConfirm, { asset: krakenAsset });
     }
-  };
+  }, [krakenAsset, navigation, setAmount, setAmountFiat, withdrawMethod]);
 
   const onPercentageSelect = (o: PercentageOption) => {
     if (o === 1) {
@@ -147,9 +147,25 @@ const KrakenConnectSend = ({ navigation, route }: NavigationProps<'KrakenConnect
     setIsInputFocused(false);
   };
 
+  const renderFooter = useCallback(
+    (props: BottomSheetFooterProps) => (
+      <BottomSheetFooter {...props}>
+        <FloatingBottomButtons
+          style={styles.buttons}
+          primary={{
+            disabled: !isFormValid || !withdrawMethod,
+            onPress: openConfirmationSheet,
+            text: loc.krakenConnect.transfer.title,
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [isFormValid, withdrawMethod, openConfirmationSheet],
+  );
+
   return (
     <>
-      <BottomSheet snapPoints={snapPoints} {...bottomSheetProps} style={styles.container}>
+      <BottomSheet snapPoints={snapPoints} {...bottomSheetProps} style={styles.container} footerComponent={renderFooter}>
         <BottomSheetScrollView
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="interactive"
@@ -188,17 +204,8 @@ const KrakenConnectSend = ({ navigation, route }: NavigationProps<'KrakenConnect
           </View>
           {isInputFocused && <View style={styles.emptyElement} />}
         </BottomSheetScrollView>
-
-        <FloatingBottomButtons
-          style={styles.buttons}
-          primary={{
-            disabled: !isFormValid || !withdrawMethod,
-            onPress: openConfirmationSheet,
-            text: loc.krakenConnect.transfer.title,
-          }}
-        />
       </BottomSheet>
-      <AmountPercentageSelector onSelect={onPercentageSelect} isInputFocused={isInputFocused} />
+      {Platform.OS !== 'ios' && <AmountPercentageSelector onSelect={onPercentageSelect} isInputFocused={isInputFocused} />}
     </>
   );
 };

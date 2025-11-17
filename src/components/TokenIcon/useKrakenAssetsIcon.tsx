@@ -14,7 +14,7 @@ export const useKrakenAssetsIcon = (
   { tokenAddress, style }: UseKrakenAssetsIconOptions,
   enabled = true,
 ): {
-  icon: JSX.Element | null;
+  icon: React.ReactElement | null;
   error: boolean;
 } => {
   const [hasError, setHasError] = useState(false);

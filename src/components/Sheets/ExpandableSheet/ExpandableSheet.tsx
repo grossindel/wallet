@@ -12,7 +12,6 @@ import { Platform, StyleSheet, View } from 'react-native';
 
 import Animated, {
   interpolate,
-  scrollTo,
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedStyle,
@@ -82,7 +81,6 @@ export const ExpandableSheet = forwardRef<ExpandableSheetMethods, ExpandableShee
       () => animatedIndex.value < 0.5,
       (collapsing, prev) => {
         if (collapsing !== prev && collapsing) {
-          scrollTo(scrollRef, 0, 0, true);
           stickyHeaderCollapsed.value = withTiming(0);
         }
       },

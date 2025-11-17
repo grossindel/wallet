@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { ImageSvg } from '@/components/ImageSvg';
 import { Label } from '@/components/Label';
@@ -43,7 +43,7 @@ export const NftItem = React.memo(({ nft, navigation, marginBottom, ...touchable
   const { primaryLabel, secondaryLabel } = getLabelsFromNft(nft);
   const { toggleGallery } = useNftGalleryToggle(nft);
   const { toggleNftInArchive } = useNftsMutations();
-  const [isLongPressed, setIsLongPressed] = useState(false);
+  const isLongPressed = useSharedValue(false);
   const { openURL } = useBrowser();
 
   const longPressOptions = useMemo(
@@ -85,16 +85,16 @@ export const NftItem = React.memo(({ nft, navigation, marginBottom, ...touchable
     [navigation, nft, nftPressed, toggleGallery, toggleNftInArchive],
   );
 
-  const onLongPressStart = () => {
-    setIsLongPressed(true);
-  };
+  const onLongPressStart = useCallback(() => {
+    isLongPressed.value = true;
+  }, [isLongPressed]);
 
-  const onLongPressEnd = () => {
-    setIsLongPressed(false);
-  };
+  const onLongPressEnd = useCallback(() => {
+    isLongPressed.value = false;
+  }, [isLongPressed]);
 
   const imageStyles = useAnimatedStyle(() => ({
-    borderRadius: withTiming(isLongPressed ? BORDER_RADIUS_LONG_PRESSED : BORDER_RADIUS),
+    borderRadius: withTiming(isLongPressed.value ? BORDER_RADIUS_LONG_PRESSED : BORDER_RADIUS),
   }));
 
   return (

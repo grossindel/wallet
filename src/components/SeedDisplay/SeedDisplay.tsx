@@ -78,6 +78,7 @@ export const SeedDisplay = ({
           {!isSeedVisible && (
             <GestureDetector
               gesture={Gesture.Tap().onEnd(() => {
+                'worklet';
                 runOnJS(hapticFeedback.impactLight)();
                 runOnJS(onSeedReveal)();
               })}>

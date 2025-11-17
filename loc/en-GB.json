@@ -94,9 +94,9 @@
       "ok": "OK",
       "settings": "Open Settings App",
       "setupPin": "Setup PIN or Biometric Unlock",
-      "tapFaceId": "Tap \\\"Face ID & Passcode\\\"",
-      "tapSecurityPivacy": "Tap \\\"Security & privacy\\\"",
-      "tapTouchId": "Tap \\\"Touch ID & Passcode\\\"",
+      "tapFaceId": "Tap \"Face ID & Passcode\"",
+      "tapSecurityPivacy": "Tap \"Security & privacy\"",
+      "tapTouchId": "Tap \"Touch ID & Passcode\"",
       "title": "First, enable {authType} in Settings",
       "touchId": "Touch ID or Passcode",
       "turnOn": "Turn on {authType}"

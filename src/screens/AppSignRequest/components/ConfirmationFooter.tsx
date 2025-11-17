@@ -8,7 +8,7 @@ import { useIsOnline } from '@/utils/useConnectionManager';
 import loc from '/loc';
 
 type Props = {
-  content: JSX.Element;
+  content: React.ReactElement;
   disableConfirmationButton?: boolean;
   onApprove: () => void;
   onReject: () => void;

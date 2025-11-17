@@ -37,7 +37,7 @@ export function Menu<T>({
   ...props
 }: MenuComponentProps<T>) {
   const menu = useMenu();
-  const layout = useRef<LayoutRectangle>();
+  const layout = useRef<LayoutRectangle | undefined>(undefined);
   const isCurrentMenuShown = useRef<boolean>(false);
 
   const showMenu = ({ nativeEvent }: GestureResponderEvent) => {

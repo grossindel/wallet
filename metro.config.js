@@ -18,12 +18,12 @@ generate({
 
 const config = {
   transformer: {
-    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    babelTransformerPath: require.resolve('./svg-transformer'),
     unstable_allowRequireContext: true,
   },
   resolver: {
     assetExts: assetExts.filter(ext => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'svg'],
+    sourceExts: [...sourceExts, 'svg', 'cjs', 'mjs'],
   },
 };
 

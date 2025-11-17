@@ -6,7 +6,7 @@ import type { AnimatedStyle } from 'react-native-reanimated';
 
 import { noop } from 'lodash';
 import { createContext, useContext, useMemo, useRef, useState } from 'react';
-import { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { Easing, runOnJS, runOnUI, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 
 import { useGlobalState } from '@/components/GlobalState';
 import type { LongPressOptionItemProps } from '@/components/LongPress/LongPressOptionItem';
@@ -23,8 +23,8 @@ interface LongPressProps {
   animatedStyle: AnimatedViewStyle;
   animatedOptionsStyle: AnimatedViewStyle;
   overlayStyle: AnimatedViewStyle;
-  styles: AnimatedViewStyle;
-  setStyles: (style: AnimatedViewStyle) => void;
+  styles: StyleProp<ViewStyle>;
+  setStyles: (style: StyleProp<ViewStyle>) => void;
   setOptions: (options: LongPressOptionItemProps[]) => void;
   options: LongPressOptionItemProps[];
 }
@@ -47,7 +47,7 @@ const TOP_DISTANCE_SMALL = 80;
 const TOP_DISTANCE_BIG = 200;
 const DURATION = 250;
 const ADDITIONAL_SCALE_DURATION = 100;
-const INITIAL_OPACITY = 0.3;
+const INITIAL_OPACITY = 0;
 const INITIAL_OPTIONS_SCALE = 0;
 const DELAY_OPACITY_OUT = 200;
 const MARGIN_X = 12 + 12;
@@ -55,8 +55,9 @@ const END_SCALE = 1.02;
 
 export const LongPressProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>();
-  const [styles, setStyles] = useState<AnimatedViewStyle>({});
+  const [styles, setStyles] = useState<StyleProp<ViewStyle>>({});
   const [options, setOptions] = useState<LongPressOptionItemProps[]>([]);
+  const [contentReady, setContentReady] = useState(false);
   const scale = useSharedValue(1);
   const translateY = useSharedValue(0);
   const translateX = useSharedValue(0);
@@ -75,53 +76,84 @@ export const LongPressProvider: React.FC<PropsWithChildren> = ({ children }) => 
         return TOP_DISTANCE_STANDARD;
     }
   }, [size]);
-  const pressOutCallback = useRef<PressOutCallback>();
+  const pressOutCallback = useRef<PressOutCallback>(undefined);
   const [, setShowNavTabs] = useGlobalState('showNavTabs');
 
   const onLongPress = (item: React.ReactNode, positionX: number, positionY: number, onPressOutCallback?: () => void) => {
-    top.value = positionY;
-    left.value = positionX;
-
     if (onPressOutCallback) {
       pressOutCallback.current = onPressOutCallback;
     }
 
-    setSelectedItem(item);
+    top.value = positionY;
+    left.value = positionX;
 
-    opacity.value = withTiming(1, { duration: DURATION });
+    setContentReady(false);
+    setSelectedItem(true as any);
+    setShowNavTabs(false);
 
-    scale.value = withTiming(END_SCALE, { duration: DURATION + ADDITIONAL_SCALE_DURATION, easing: Easing.inOut(Easing.linear) }, () => {
-      translateY.value = withTiming(-(positionY - topDistance), {
-        duration: DURATION,
-        easing: Easing.inOut(Easing.cubic),
+    runOnUI(() => {
+      'worklet';
+
+      opacity.value = withTiming(1, { duration: DURATION });
+
+      scale.value = withTiming(END_SCALE, {
+        duration: DURATION + ADDITIONAL_SCALE_DURATION,
+        easing: Easing.inOut(Easing.linear),
       });
-      optionsScale.value = withTiming(1, { duration: DURATION });
-      if (positionX !== 0) {
-        translateX.value = withTiming(-positionX + MARGIN_X, {
+
+      const translateDelay = 100;
+
+      translateY.value = withDelay(
+        translateDelay,
+        withTiming(-(positionY - topDistance), {
           duration: DURATION,
           easing: Easing.inOut(Easing.cubic),
-        });
-      }
-    });
+        }),
+      );
 
-    setShowNavTabs(false);
+      optionsScale.value = withDelay(translateDelay, withTiming(1, { duration: DURATION }));
+
+      if (positionX !== 0) {
+        translateX.value = withDelay(
+          translateDelay,
+          withTiming(-positionX + MARGIN_X, {
+            duration: DURATION,
+            easing: Easing.inOut(Easing.cubic),
+          }),
+        );
+      }
+    })();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setSelectedItem(item);
+        setContentReady(true);
+      });
+    });
   };
 
   const onPressOut = (skipAnimation?: boolean, callback?: PressOutCallback) => {
     setShowNavTabs(true);
+    setContentReady(false);
 
     if (pressOutCallback.current) {
       pressOutCallback.current();
       pressOutCallback.current = undefined;
     }
     if (skipAnimation) {
-      opacity.value = withTiming(INITIAL_OPACITY, { duration: DURATION }, () => {
+      opacity.value = withTiming(INITIAL_OPACITY, { duration: DURATION }, finished => {
+        'worklet';
+        if (!finished) {
+          return;
+        }
         runOnJS(setSelectedItem)(null);
         scale.value = 1;
         translateX.value = 0;
         translateY.value = 0;
         optionsScale.value = INITIAL_OPTIONS_SCALE;
-        callback && runOnJS(callback)();
+        if (callback) {
+          runOnJS(callback)();
+        }
       });
 
       return;
@@ -133,9 +165,15 @@ export const LongPressProvider: React.FC<PropsWithChildren> = ({ children }) => 
         duration: DURATION,
         easing: Easing.inOut(Easing.ease),
       },
-      () => {
+      finished => {
+        'worklet';
+        if (!finished) {
+          return;
+        }
         runOnJS(setSelectedItem)(null);
-        callback && runOnJS(callback)();
+        if (callback) {
+          runOnJS(callback)();
+        }
       },
     );
 
@@ -170,7 +208,7 @@ export const LongPressProvider: React.FC<PropsWithChildren> = ({ children }) => 
   return (
     <LongPressContext.Provider
       value={{
-        selectedItem,
+        selectedItem: contentReady ? selectedItem : null,
         onLongPress,
         onPressOut,
         animatedStyle,

@@ -1,6 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { noop } from 'lodash';
-
 import { StyleSheet, View } from 'react-native';
 
 import { AvatarIcon } from '@/components/AvatarIcon';
@@ -163,7 +161,7 @@ export const WalletItem = ({
 
       {showMenu ? (
         <Menu type="context" testID={`ManageIcon-${accountCustomName}`} items={MENU_ITEMS}>
-          <IconButton name="more" onPress={noop} backgroundColor="light8" />
+          <IconButton name="more" backgroundColor="light8" />
         </Menu>
       ) : null}
     </Touchable>

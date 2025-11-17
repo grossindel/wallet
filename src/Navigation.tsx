@@ -67,7 +67,10 @@ const NavigationStack = () => {
   const theme = useTheme();
   const realm = useRealm();
   const language = useLanguage();
-  useAnimatedKeyboard({ isStatusBarTranslucentAndroid: true });
+  useAnimatedKeyboard({
+    isStatusBarTranslucentAndroid: true,
+    isNavigationBarTranslucentAndroid: true,
+  });
   useCheckAndSetFontScale();
   useRegisterRefreshManager();
   useConnectionManager();

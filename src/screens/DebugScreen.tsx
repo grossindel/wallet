@@ -326,7 +326,7 @@ export const DebugScreen = () => {
         <Button size="large" text="Run diagnostics" testID="RunDiagnosticsButton" onPress={onRunDiagnostics} style={styles.spacing} />
         <Button size="large" text="Show wallet state" testID="ShowWalletState" onPress={() => walletStateRef.current?.expand()} style={styles.spacing} />
       </ScrollView>
-      <BottomSheet noSafeInsetTop ref={errorSheetRef} index={-1} snapPoints={['100%']} footerComponent={errorSheetFooter}>
+      <BottomSheet ref={errorSheetRef} index={-1} snapPoints={['100%']} footerComponent={errorSheetFooter}>
         <BottomSheetScrollView style={{ paddingHorizontal: 24, marginBottom: paddingBottom }}>
           {recentErrors.length === 0 && <Label style={styles.emptyErrors}>No recent errors</Label>}
           {recentErrors.map(({ timestamp, error, context }) => (
@@ -335,13 +335,13 @@ export const DebugScreen = () => {
         </BottomSheetScrollView>
       </BottomSheet>
 
-      <BottomSheet noSafeInsetTop ref={walletStateRef} index={-1} snapPoints={['100%']}>
+      <BottomSheet ref={walletStateRef} index={-1} snapPoints={['100%']}>
         <WalletStateSheet />
       </BottomSheet>
-      <BottomSheet noSafeInsetTop ref={deviceInfoRef} index={-1} snapPoints={['100%']}>
+      <BottomSheet ref={deviceInfoRef} index={-1} snapPoints={['100%']}>
         <DeviceInfo info={{ ...deviceInfo, pushPermission: pushGranted, pushSettings, pushToken: token }} />
       </BottomSheet>
-      <BottomSheet noSafeInsetTop ref={backendConfigRef} index={-1} snapPoints={['100%']}>
+      <BottomSheet ref={backendConfigRef} index={-1} snapPoints={['100%']}>
         <BackendConfig />
       </BottomSheet>
     </>

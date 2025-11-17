@@ -190,7 +190,7 @@ export const SendConfirmScreen = ({ route, navigation }: SendNavigationProps<'Se
     <ExpandableSheet
       isModal
       dismissible={!isLoading}
-      ref={sheetRef}
+      ref={sheetRef as React.RefObject<ExpandableSheetMethods>}
       onDismiss={onDismiss}
       PreviewComponent={
         <Preview

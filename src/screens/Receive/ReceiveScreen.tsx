@@ -1,5 +1,7 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetFooter, type BottomSheetFooterProps, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+
 import { useIsFocused } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -49,14 +51,23 @@ export const ReceiveScreen = ({ route, navigation }: NavigationProps<'Receive'>)
 
   const { network } = getImplForWallet(wallet);
 
-  const share = () => Share.open({ message: displayAddressText });
+  const share = useCallback(() => Share.open({ message: displayAddressText }), [displayAddressText]);
   const { width } = useSafeAreaFrame();
   const { size } = useDeviceSize();
   const qrCodeOffset = size === 'small' ? 168 : 96;
   const qrCodeSize = width - qrCodeOffset;
 
+  const renderFooter = useCallback(
+    (props: BottomSheetFooterProps) => (
+      <BottomSheetFooter {...props}>
+        <FloatingBottomButtons primary={{ text: loc.receive.share, onPress: share, testID: 'ShareButton' }} />
+      </BottomSheetFooter>
+    ),
+    [share],
+  );
+
   return (
-    <BottomSheet dismissible={useIsFocused()} animatedIndex={sheetIndex} snapPoints={['100%']} {...bottomSheetProps}>
+    <BottomSheet dismissible={useIsFocused()} animatedIndex={sheetIndex} snapPoints={['100%']} {...bottomSheetProps} footerComponent={renderFooter}>
       <ModalNavigationHeader onClosePress={close} title={<CoinHeader wallet={wallet} token={token} />} />
       <BottomSheetScrollView style={styles.scrollView} testID="ReceiveScreen">
         {displayAddressText ? (
@@ -81,7 +92,6 @@ export const ReceiveScreen = ({ route, navigation }: NavigationProps<'Receive'>)
           <ActivityIndicator />
         </View>
       ) : undefined}
-      <FloatingBottomButtons primary={{ text: loc.receive.share, onPress: share, testID: 'ShareButton' }} />
     </BottomSheet>
   );
 };

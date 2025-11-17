@@ -161,12 +161,11 @@ export const MenuOverlay: React.FC<MenuOverlayProps<any>> = ({ origin, menuWidth
             </View>
           )}
           {props.type === 'context' && (
-            <>
+            <View>
               <View style={[styles.blurBackground, { backgroundColor: Platform.select({ ios: colors.background, default: colors.androidDarkBlurBg }) }]} />
-              <BlurView blurAmount={60} blurType="dark" style={styles.blur}>
-                <ContextMenu {...props} onClose={onClose} />
-              </BlurView>
-            </>
+              <BlurView blurAmount={60} blurType="dark" style={[StyleSheet.absoluteFill, styles.blur]} />
+              <ContextMenu {...props} onClose={onClose} />
+            </View>
           )}
         </Animated.View>
       </View>

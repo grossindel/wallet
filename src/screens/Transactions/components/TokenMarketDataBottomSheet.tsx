@@ -111,8 +111,8 @@ export const TokenMarketDataBottomSheet = ({ tokenId, onPositionChange, position
       animateOnMount
       index={defaultSheetPosition}
       dismissible={false}
-      noSafeInsetTop
       noBackdrop
+      noSafeInsetTop
       ref={ref}
       onChange={handleSheetPositionChange}>
       <BottomSheetScrollView contentContainerStyle={[styles.container, { paddingBottom }]}>

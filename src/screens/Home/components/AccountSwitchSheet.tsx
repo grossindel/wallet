@@ -1,6 +1,6 @@
 import type { ListRenderItem } from 'react-native';
 
-import { BottomSheetView, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import { BottomSheetFooter, BottomSheetView, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import noop from 'lodash/noop';
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
@@ -22,6 +22,8 @@ import { useAccounts, useCurrentAccountNumber } from '@/realm/accounts';
 import { Routes } from '@/Routes';
 import { WalletBackupWarning } from '@/screens/Settings/walletBackup';
 import { useIsOnline } from '@/utils/useConnectionManager';
+
+import type { BottomSheetFooterProps } from '@gorhom/bottom-sheet';
 
 import loc from '/loc';
 
@@ -83,13 +85,6 @@ export const AccountSwitchSheet = forwardRef<BottomSheetModalRef>((_, ref) => {
     [accountNumber, accounts.length, handleWalletItemPress],
   );
 
-  const handleCreateNewAccount = async () => {
-    if (isOnline) {
-      dismissModal();
-      createAccount();
-    }
-  };
-
   const handleBottomSheetChange = (index: number) => {
     if (index > -1) {
       listRef.current?.scrollToIndex({ index: currentAccountIndex, animated: true });
@@ -98,8 +93,31 @@ export const AccountSwitchSheet = forwardRef<BottomSheetModalRef>((_, ref) => {
 
   const marginBottom = useBottomSheetPadding(false);
 
+  const handleCreateNewAccount = useCallback(async () => {
+    if (isOnline) {
+      dismissModal();
+      createAccount();
+    }
+  }, [isOnline, dismissModal, createAccount]);
+
+  const renderFooter = useCallback(
+    (props: BottomSheetFooterProps) => (
+      <BottomSheetFooter {...props}>
+        <FloatingBottomButtons
+          primary={{
+            disabled: !isOnline,
+            text: loc.accountSwitch.createWallet,
+            onPress: handleCreateNewAccount,
+            testID: 'CreateWalletButton',
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [isOnline, handleCreateNewAccount],
+  );
+
   return (
-    <BottomSheetModal enableDynamicSizing name={ACCOUNT_SWITCH_MODAL} onChange={handleBottomSheetChange} ref={ref}>
+    <BottomSheetModal enableDynamicSizing name={ACCOUNT_SWITCH_MODAL} onChange={handleBottomSheetChange} ref={ref} footerComponent={renderFooter}>
       <BottomSheetView>
         <View style={[styles.header, styles.container]} testID="ManageButtonHeader">
           <Label>{loc.accountSwitch.wallets}</Label>
@@ -118,14 +136,6 @@ export const AccountSwitchSheet = forwardRef<BottomSheetModalRef>((_, ref) => {
           contentContainerStyle={styles.container}
         />
       </BottomSheetView>
-      <FloatingBottomButtons
-        primary={{
-          disabled: !isOnline,
-          text: loc.accountSwitch.createWallet,
-          onPress: handleCreateNewAccount,
-          testID: 'CreateWalletButton',
-        }}
-      />
     </BottomSheetModal>
   );
 });

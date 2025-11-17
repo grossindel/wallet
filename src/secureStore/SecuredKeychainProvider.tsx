@@ -30,9 +30,9 @@ const SecuredKeychainContext = createContext<SecuredKeychainContext>({
 
 export const SecuredKeychainProvider = ({ children }: PropsWithChildren) => {
   const sheetRef = useRef<PasswordProtectionModalRef>(null);
-  const resolveResult = useRef<(value: SecretWithPassword | PromiseLike<SecretWithPassword>) => void>();
-  const retrieve = useRef<typeof retrieveMnemonic | typeof retrieveSeed>();
-  const appLockSecret = useRef<string | false>();
+  const resolveResult = useRef<((value: SecretWithPassword | PromiseLike<SecretWithPassword>) => void) | undefined>(undefined);
+  const retrieve = useRef<typeof retrieveMnemonic | typeof retrieveSeed | undefined>(undefined);
+  const appLockSecret = useRef<string | false | undefined>(undefined);
 
   const lockout = useLockout();
 

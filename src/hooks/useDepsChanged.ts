@@ -3,7 +3,7 @@ import type { DependencyList } from 'react';
 import { useRef } from 'react';
 
 export const useDepsChanged = (deps?: DependencyList): boolean => {
-  const lastDeps = useRef<DependencyList>();
+  const lastDeps = useRef<DependencyList | undefined>(undefined);
 
   try {
     if (!lastDeps.current || !deps || deps.length !== lastDeps.current.length) {

@@ -1,11 +1,11 @@
 import { type StyleProp, StyleSheet, View, type ViewStyle } from 'react-native';
 
 export type TransactionRowProps = {
-  amounts?: JSX.Element;
+  amounts?: React.ReactElement;
   containerStyle?: StyleProp<ViewStyle>;
-  icon?: JSX.Element;
-  subtitle?: JSX.Element;
-  title?: JSX.Element;
+  icon?: React.ReactElement;
+  subtitle?: React.ReactElement;
+  title?: React.ReactElement;
   testID?: string;
 };
 

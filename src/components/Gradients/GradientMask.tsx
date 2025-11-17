@@ -15,16 +15,18 @@ export const GradientMask: React.FC<MaskedGradientProps> = ({ element, style }) 
 
   const onLayout = (e: LayoutChangeEvent) => setLayout(e.nativeEvent.layout);
 
+  const elementProps = element.props as { onLayout?: (e: LayoutChangeEvent) => void; style?: StyleProp<ViewStyle> };
+
   const elementToMeasure = React.cloneElement(element, {
     onLayout: (e: LayoutChangeEvent) => {
-      element.props?.onLayout?.(e);
+      elementProps?.onLayout?.(e);
       onLayout(e);
     },
-  });
+  } as Partial<typeof elementProps>);
 
   return (
     <MaskedView maskElement={element} style={style}>
-      <View style={[layout && { width: layout.width }, styles.row, element.props.style]}>
+      <View style={[layout && { width: layout.width }, styles.row, elementProps.style]}>
         {elementToMeasure}
         <Svg style={StyleSheet.absoluteFill}>
           <Defs>

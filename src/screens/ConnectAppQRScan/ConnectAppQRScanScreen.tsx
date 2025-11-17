@@ -16,7 +16,7 @@ import { GradientScreenView } from '@/components/Gradients';
 import { Label } from '@/components/Label';
 import { useRealm } from '@/realm/RealmContext';
 import { useWalletConnectTopicsMutations } from '@/realm/walletConnectTopics/useWalletConnectTopicsMutations';
-import { type NavigationProps, type NoParamsRoute, Routes } from '@/Routes';
+import { type NavigationProps, Routes } from '@/Routes';
 import { useSecuredKeychain } from '@/secureStore/SecuredKeychainProvider';
 import { useUnencryptedRealm } from '@/unencrypted-realm/RealmContext';
 import { navigationStyle } from '@/utils/navigationStyle';
@@ -31,7 +31,7 @@ import { handleConnectToDappWalletConnectUri } from '/modules/wallet-connect/han
 import { matchPairingTopic } from '/modules/wallet-connect/utils';
 
 export type ScanQRCodeParams = {
-  successRoute?: NoParamsRoute;
+  successRoute?: Routes.Home;
 };
 
 export const ConnectAppQRScanScreen = ({ navigation, route }: NavigationProps<'ConnectAppQRScan'>) => {

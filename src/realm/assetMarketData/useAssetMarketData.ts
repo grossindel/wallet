@@ -21,7 +21,7 @@ export const useAssetMarketData = ({ assetId, refresh }: Props) => {
   const { setAssetMarketData } = useAssetMarketDataMutations();
   const { currency } = useAppCurrency();
 
-  const didFetch = useRef<boolean>();
+  const didFetch = useRef<boolean | undefined>(undefined);
 
   useEffect(() => {
     const fetchAndSetMarketData = async () => {

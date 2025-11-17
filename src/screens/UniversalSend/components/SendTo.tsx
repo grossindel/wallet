@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-import { FloatingBottomButtons } from '@/components/FloatingBottomButtons';
 import { Label } from '@/components/Label';
 import { useBottomSheetPadding } from '@/hooks/useBottomSheetPadding';
 import type { Network } from '@/onChain/wallets/base';
@@ -40,17 +39,7 @@ type Props = {
   onScanRequest: () => void;
 };
 
-export const SendTo = ({
-  address,
-  addressOrEns,
-  setAddressOrEns,
-  setAddress,
-  addressAnalysis,
-  setSupportedNetworks,
-  onContinue,
-  sendToAccount,
-  onScanRequest,
-}: Props) => {
+export const SendTo = ({ address, addressOrEns, setAddressOrEns, setAddress, addressAnalysis, setSupportedNetworks, sendToAccount, onScanRequest }: Props) => {
   const accounts = useAccounts();
   const currentAccountNumber = useCurrentAccountNumber();
 
@@ -139,15 +128,6 @@ export const SendTo = ({
           automaticallyAdjustContentInsets
         />
       )}
-      <FloatingBottomButtons
-        primary={{
-          disabled: !isFormValid || addressAnalysis.isLoading,
-          text: loc.universalSend.continue,
-          onPress: onContinue,
-          style: styles.button,
-          testID: 'ContinueBtn',
-        }}
-      />
     </>
   );
 };

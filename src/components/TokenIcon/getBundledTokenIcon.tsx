@@ -11,7 +11,7 @@ type GetBundledTokenIconProps = {
   size: number;
 };
 
-export const getBundledTokenIcon = ({ tokenSymbol, tokenNetworkName, style, size }: GetBundledTokenIconProps): JSX.Element | undefined => {
+export const getBundledTokenIcon = ({ tokenSymbol, tokenNetworkName, style, size }: GetBundledTokenIconProps): React.ReactElement | undefined => {
   const Icon = tokenSymbol ? getTokenIcon(tokenSymbol, tokenNetworkName) : undefined;
 
   return Icon && <Icon style={style} width={size} height={size} />;

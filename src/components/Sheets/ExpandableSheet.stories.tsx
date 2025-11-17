@@ -77,7 +77,7 @@ export const Modal: StoryObj<ExpandableSheetPropsAndCustomArgs> = {
         <Button style={styles.button} text="Show modal" onPress={() => expandableSheetRef.current?.expand()} />
         <ExpandableSheet
           {...args}
-          ref={expandableSheetRef}
+          ref={expandableSheetRef as React.RefObject<ExpandableSheetMethods>}
           PreviewComponent={
             <View style={styles.textView}>
               <Text style={styles.text}>Lorem ipsum.</Text>

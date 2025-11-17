@@ -13,7 +13,7 @@ export const ExploreRow = ({ children, index = 0 }: ExploreRowProps) => {
     return null;
   }
   return (
-    <Animated.View entering={FadeIn.duration(500).delay(delay)} exiting={FadeOut.duration(500).delay(delay)}>
+    <Animated.View entering={FadeIn.duration(500).delay(delay)} exiting={FadeOut.duration(500).delay(delay)} pointerEvents="box-none">
       <View style={styles.row}>{children}</View>
     </Animated.View>
   );

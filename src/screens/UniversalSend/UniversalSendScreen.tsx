@@ -1,6 +1,8 @@
+import { BottomSheetFooter } from '@gorhom/bottom-sheet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BottomSheet } from '@/components/BottomSheet';
+import { FloatingBottomButtons } from '@/components/FloatingBottomButtons';
 import { showToast } from '@/components/Toast';
 import { useBottomSheetScreenProps } from '@/hooks/useBottomSheetScreenProps';
 import { useGetWalletStorage } from '@/hooks/useGetWalletStorage';
@@ -20,6 +22,8 @@ import { useUnencryptedRealm } from '@/unencrypted-realm/RealmContext';
 import { navigationStyle } from '@/utils/navigationStyle';
 
 import { SendAsset, SendTo } from './components';
+
+import type { BottomSheetFooterProps } from '@gorhom/bottom-sheet';
 
 import loc from '/loc';
 
@@ -46,9 +50,9 @@ const UniversalSend = ({ navigation, route: { params } }: NavigationProps<'Unive
   const realm = useRealm();
   const unencryptedRealm = useUnencryptedRealm();
 
-  const onContinue = () => {
+  const onContinue = useCallback(() => {
     setScreenMode('sendAsset');
-  };
+  }, []);
 
   const goBack = useCallback(() => {
     setAddress('');
@@ -128,8 +132,25 @@ const UniversalSend = ({ navigation, route: { params } }: NavigationProps<'Unive
 
   const onScanRequest = () => navigation.navigate(Routes.SendQRScan, { ...params, routeBack: Routes.UniversalSend });
 
+  const renderFooter = useCallback(
+    (props: BottomSheetFooterProps) =>
+      screenMode === 'sendTo' ? (
+        <BottomSheetFooter {...props}>
+          <FloatingBottomButtons
+            primary={{
+              disabled: addressAnalysis.isLoading,
+              text: loc.universalSend.continue,
+              onPress: onContinue,
+              testID: 'ContinueBtn',
+            }}
+          />
+        </BottomSheetFooter>
+      ) : null,
+    [screenMode, addressAnalysis.isLoading, onContinue],
+  );
+
   return (
-    <BottomSheet snapPoints={snapPoints} {...bottomSheetProps}>
+    <BottomSheet snapPoints={snapPoints} {...bottomSheetProps} footerComponent={screenMode === 'sendTo' ? renderFooter : undefined}>
       {screenMode === 'sendTo' ? (
         <SendTo
           address={address}

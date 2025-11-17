@@ -3,7 +3,7 @@ import type { DependencyList, EffectCallback } from 'react';
 import { useEffect, useRef } from 'react';
 
 export const useDelayEffect = (effect: EffectCallback, dependencies: DependencyList, delay = 1000): void => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(
     function delayedEffect() {

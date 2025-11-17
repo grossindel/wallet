@@ -480,19 +480,19 @@ export const waitTillConnected = async function () {
   return new Promise(function (resolve, reject) {
     waitTillConnectedInterval = setInterval(() => {
       if (ElectrumState.mainConnected) {
-        clearInterval(waitTillConnectedInterval);
+        clearInterval(waitTillConnectedInterval as unknown as NodeJS.Timeout);
         return resolve(true);
       }
 
       if (ElectrumState.wasConnectedAtLeastOnce && ElectrumState.mainClient.status === 1) {
-        clearInterval(waitTillConnectedInterval);
+        clearInterval(waitTillConnectedInterval as unknown as NodeJS.Timeout);
         ElectrumState.mainConnected = true;
         emitElectrumConnected();
         return resolve(true);
       }
 
       if (ElectrumState.wasConnectedAtLeastOnce && retriesCounter++ >= 30) {
-        clearInterval(waitTillConnectedInterval);
+        clearInterval(waitTillConnectedInterval as unknown as NodeJS.Timeout);
         emitElectrumDisconnected();
         reject(new Error('Waiting for Electrum connection timeout'));
       }

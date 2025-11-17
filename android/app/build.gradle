@@ -2,7 +2,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply plugin: 'kotlin-android'
+// apply plugin: 'kotlin-android'
 import com.android.build.OutputFile
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
@@ -155,20 +155,34 @@ android {
     }
 
     androidResources {
-      noCompress += ["bundle"]
+        noCompress += ["bundle"]
     }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+            // Ensure only a single C++ runtime is packaged to avoid symbol conflicts for Skia
+            pickFirsts += ['**/libc++_shared.so']
+        }
+    }
+}
+
+// Exclude Conceal from react-native-keychain for 16KB page size compatibility
+// react-native-keychain will fall back to using Android Keystore which is more secure
+configurations.all {
+    exclude group: 'com.facebook.conceal', module: 'conceal'
 }
 
 dependencies {
 
-    // For animated GIF support in RN Image component
-    implementation 'com.facebook.fresco:animated-gif:2.5.0'
-    // For WebP support, including animated WebP in RN Image component
-    implementation 'com.facebook.fresco:animated-webp:2.5.0'
-    implementation 'com.facebook.fresco:webpsupport:2.5.0'
+    // For animated GIF support in RN Image component (upgraded for 16KB page size support)
+    implementation 'com.facebook.fresco:animated-gif:3.6.0'
+    // For WebP support, including animated WebP in RN Image component (upgraded for 16KB page size support)
+    implementation 'com.facebook.fresco:animated-webp:3.6.0'
+    implementation 'com.facebook.fresco:webpsupport:3.6.0'
 
-    // For animated WebP support in FastImage component
-    implementation "com.github.zjupure:webpdecoder:2.1.${glideVersion}"
+    // Glide 4.15.1+ has built-in WebP support, no external decoder needed
+    // (webpdecoder is not available for Glide 4.15+)
 
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")

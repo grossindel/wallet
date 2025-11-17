@@ -227,6 +227,3 @@ declare global {
 /* eslint-enable */
 
 export type NavigationProps<T extends keyof RouteProps> = NativeStackScreenProps<RouteProps, T>;
-
-export type NoParamsList = Pick<RouteProps, { [K in keyof RouteProps]: RouteProps[K] extends undefined ? K : never }[keyof RouteProps]>;
-export type NoParamsRoute = keyof NoParamsList;

@@ -42,10 +42,10 @@ export const useConnectionManager = () => {
   const isOnline = useIsOnline();
   const { refreshAll } = useRefreshStateActions();
   const [isElectrumConnected, setIsElectrumConnected] = useState(false);
-  const wasOffline = useRef<boolean>();
+  const wasOffline = useRef<boolean | undefined>(undefined);
   const currentAccountNumber = useCurrentAccountNumberOrUndefined();
   const appState = useAppState();
-  const lastAppInBackgroundTime = useRef<number | undefined>();
+  const lastAppInBackgroundTime = useRef<number | undefined>(undefined);
 
   const shouldRefreshElectrum = useCallback(() => {
     const now = Date.now();

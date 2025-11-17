@@ -20,7 +20,7 @@ const DELAY_TIME_FETCH_BALANCE = 3000;
 const delayFetchBalance = () => new Promise(resolve => setTimeout(resolve, DELAY_TIME_FETCH_BALANCE));
 
 export const useMonitorPendingTransactions = () => {
-  const interval = useRef<NodeJS.Timer>();
+  const interval = useRef<NodeJS.Timer | undefined>(undefined);
   const pendingTransactions = usePendingTransactions();
   const { confirmPendingTransaction, dangerouslyCleanupConfirmedTransactions, invalidatePendingTransaction } = useTransactionMutations();
   const { setTokenGalleryStatus } = useTokensMutations();
@@ -109,7 +109,9 @@ export const useMonitorPendingTransactions = () => {
     }
 
     return () => {
-      clearInterval(interval.current);
+      if (interval.current) {
+        clearInterval(interval.current as unknown as NodeJS.Timeout);
+      }
     };
   }, [checkPendingKrakenTransfer, checkTransaction, pendingTransactions]);
 

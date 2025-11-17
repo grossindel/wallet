@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-reanimated/src/hook/useAnimatedRef.ts b/node_modules/react-native-reanimated/src/hook/useAnimatedRef.ts
+index 1913072..cb82514 100644
+--- a/node_modules/react-native-reanimated/src/hook/useAnimatedRef.ts
++++ b/node_modules/react-native-reanimated/src/hook/useAnimatedRef.ts
+@@ -57,7 +57,7 @@ function useAnimatedRefBase<TComponent extends Component>(
+         tagOrWrapperRef.current = getWrapper(component);
+ 
+         // We have to unwrap the tag from the shadow node wrapper.
+-        fun.getTag = () => findNodeHandle(getComponentOrScrollable(component));
++        fun.getTag = () => findNodeHandle(component as any);
+         fun.current = component;
+ 
+         if (observers.size) {
+@@ -112,7 +112,7 @@ function useAnimatedRefNative<
+       ? getShadowNodeWrapperFromRef
+       : findNodeHandle;
+ 
+-    tagOrWrapper.value = getTagOrWrapper(getComponentOrScrollable(component));
++    tagOrWrapper.value = getTagOrWrapper(component as any);
+ 
+     if (viewName) {
+       viewName.value =

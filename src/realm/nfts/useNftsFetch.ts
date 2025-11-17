@@ -26,7 +26,7 @@ export const useNftsFetch = () => {
   const unencryptedRealm = useUnencryptedRealm();
   const { saveNftsToRealm } = useNftsMutations();
   const { runInTransaction } = useRealmTransaction();
-  const fetchState = useRef<FetchState>();
+  const fetchState = useRef<FetchState | undefined>(undefined);
 
   const getRawNftMetadata = useCallback(
     (nft: NFT) => {

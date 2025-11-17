@@ -50,7 +50,7 @@ export const ConnectedApps = forwardRef<BottomSheetModalRef, ConnectedAppsProps>
       const { icons, name, url } = session?.peer?.metadata ?? {};
       const onPress = () => url && openURL(url);
       const iconUri = (icons || [])[0] ?? '';
-      const items: JSX.Element[] = [];
+      const items: React.ReactElement[] = [];
 
       loopOverAllSessionNamespaceAccounts(session, (account, i) => {
         const network = getNetworkNameFromWalletString(account);

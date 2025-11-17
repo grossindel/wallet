@@ -28,7 +28,7 @@ export const useAssetMetadata = ({ assetId, realmQueueName, refresh }: Props): A
   const { setShouldUseCache } = useLocalCacheState(assetId);
   const { addToRealmTransactionQueue, saveInLocalCache, getFromLocalCache } = useRealmQueue();
   const localCacheValue = assetId && realmQueueName ? getFromLocalCache<AssetMetadata>(realmQueueName, CACHE_KEY, assetId) : undefined;
-  const didFetch = useRef<boolean>();
+  const didFetch = useRef<boolean | undefined>(undefined);
 
   useEffect(() => {
     const fetchAndSetAssetMetadata = async () => {

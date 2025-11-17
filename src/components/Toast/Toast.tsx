@@ -114,6 +114,7 @@ export const Toast = ({
   }));
 
   const tapGesture = Gesture.Tap().onEnd(() => {
+    'worklet';
     if (__DEV__) {
       runOnJS(Clipboard.setString)(text);
     }

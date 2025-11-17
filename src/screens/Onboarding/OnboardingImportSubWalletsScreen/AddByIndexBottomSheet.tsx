@@ -71,7 +71,7 @@ export const AddByIndexBottomSheet = ({ onDismiss, setSubWalletsFromAddByIndex }
   );
 
   return (
-    <BottomSheet ref={bottomSheetRef} snapPoints={snapPoints} index={0} onDismiss={onDismiss_} animateOnMount dismissible noSafeInsetTop noBackdrop>
+    <BottomSheet ref={bottomSheetRef} snapPoints={snapPoints} index={0} onDismiss={onDismiss_} animateOnMount dismissible noBackdrop>
       <KeyboardAvoider style={styles.keyboardAvoider}>
         <View style={styles.header}>
           <Label type="boldDisplay5">{loc.onboardingImportSubWallets.addByIndex.title}</Label>

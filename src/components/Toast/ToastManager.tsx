@@ -1,6 +1,5 @@
 import type React from 'react';
 
-import { useNavigationState } from '@react-navigation/native';
 import { defaults, isEqual, remove } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -18,13 +17,15 @@ const defaultProps: Partial<ToastConfigProps> = {
   dismissMode: 'auto',
 };
 
-export const ToastManager: React.FC = () => {
+type ToastManagerProps = {
+  currentRouteName?: Routes;
+};
+
+export const ToastManager: React.FC<ToastManagerProps> = ({ currentRouteName: currentRouteNameProp }) => {
   const [currentProps, setCurrentProps] = useState<ToastConfigProps>();
   const queue = useRef<ToastConfigProps[]>([]);
   const visibility = useSharedValue(0);
-
-  const navigationState = useNavigationState(state => state);
-  const [currentRouteName, setCurrentRouteName] = useState<Routes>();
+  const [currentRouteName, setCurrentRouteName] = useState<Routes | undefined>(currentRouteNameProp);
 
   const toastVisibleForRoute = useMemo(() => {
     if (currentProps && 'blackListRoutes' in currentProps && currentProps.blackListRoutes !== undefined) {
@@ -37,9 +38,8 @@ export const ToastManager: React.FC = () => {
   }, [currentProps, currentRouteName]);
 
   useEffect(() => {
-    const routeName = navigationState?.routes[navigationState.index ?? 0].name as Routes;
-    setCurrentRouteName(routeName);
-  }, [navigationState]);
+    setCurrentRouteName(currentRouteNameProp);
+  }, [currentRouteNameProp]);
 
   const removeToastByIdFromQueue = useCallback((id?: string) => {
     if (id) {

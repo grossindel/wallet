@@ -1,4 +1,5 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetFooter, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
@@ -34,6 +35,8 @@ import { NftName } from './components/NftName';
 import { NftPreview } from './components/NftPreview';
 import { NftTraits } from './components/NftTraits';
 import { useGalleryTransiton } from './hooks/useGalleryTransition';
+
+import type { BottomSheetFooterProps } from '@gorhom/bottom-sheet';
 
 import type BottomSheetView from '@gorhom/bottom-sheet';
 
@@ -173,6 +176,23 @@ export const ViewNftScreen = ({ navigation, route }: NavigationProps<'ViewNft'>)
     };
   }, [screenHeight, imageData]);
 
+  const renderFooter = useCallback(
+    (props: BottomSheetFooterProps) => (
+      <BottomSheetFooter {...props}>
+        <FloatingBottomButtons
+          style={floatingButtonStyle}
+          primary={{
+            testID: nft.isArchived ? 'ArchiveNftButton' : 'SendNftButton',
+            disabled: !nft.isArchived && !isOnline,
+            text: nft.isArchived ? loc.nftManage.unArchive : loc._.send,
+            onPress: handlePressBtn,
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [floatingButtonStyle, nft.isArchived, isOnline, handlePressBtn],
+  );
+
   if (!nft) {
     return null;
   }
@@ -201,7 +221,8 @@ export const ViewNftScreen = ({ navigation, route }: NavigationProps<'ViewNft'>)
         dismissible={imageData.isReady}
         snapPoints={[bottomSheetSnapPoint, screenHeight]}
         animatedPosition={bottomSheetPosition}
-        onDismiss={openGallery}>
+        onDismiss={openGallery}
+        footerComponent={renderFooter}>
         <NftName nft={nft} containerStyle={styles.nameContainer} testID="NftName" />
         <FadingElement containerStyle={styles.fadingElement}>
           <BottomSheetScrollView contentContainerStyle={styles.sheetScrollContainer}>
@@ -235,15 +256,6 @@ export const ViewNftScreen = ({ navigation, route }: NavigationProps<'ViewNft'>)
           </BottomSheetScrollView>
         </FadingElement>
       </BottomSheet>
-      <FloatingBottomButtons
-        style={floatingButtonStyle}
-        primary={{
-          testID: nft.isArchived ? 'ArchiveNftButton' : 'SendNftButton',
-          disabled: !nft.isArchived && !isOnline,
-          text: nft.isArchived ? loc.nftManage.unArchive : loc._.send,
-          onPress: handlePressBtn,
-        }}
-      />
     </GradientScreenView>
   );
 };

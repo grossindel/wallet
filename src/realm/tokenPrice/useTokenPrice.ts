@@ -39,7 +39,7 @@ export const useTokenPriceFiatValue = ({ assetId, realmQueueName, refresh }: Pri
   const { addToRealmTransactionQueue, getFromLocalCache, saveInLocalCache } = useRealmQueue();
   const localCacheValue = assetId && realmQueueName ? getFromLocalCache<TokenPrice>(realmQueueName, CACHE_KEY, assetId) : undefined;
   const [isRefreshing] = useGlobalState('isRefreshing');
-  const didFetch = useRef<boolean>();
+  const didFetch = useRef<boolean | undefined>(undefined);
 
   useEffect(() => {
     const fetchAndSetTokenPrice = async () => {

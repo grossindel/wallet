@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react';
 import type React from 'react';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { LogBox, Platform, StatusBar, StyleSheet, Text, type TextProps, UIManager } from 'react-native';
@@ -22,6 +22,8 @@ import { AppInBackground } from '@/screens/AppInBackground';
 import { UnencryptedRealmProvider } from '@/unencrypted-realm/RealmContext';
 
 import { runMigrations } from '@/utils/migrations';
+
+import { useAppState } from '@/utils/useAppState';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExploreNavigator } from './components/ExploreNavigator';
@@ -78,6 +80,10 @@ const onJSError = (error: unknown) => handleError(error, 'ERROR_CONTEXT_PLACEHOL
 
 const App = () => {
   const [migrationCompleted, setMigrationCompleted] = useState(false);
+  const navigationRef = createNavigationContainerRef();
+  const [currentRouteName] = useState<string | undefined>(undefined);
+
+  const appState = useAppState();
 
   useEffect(() => {
     const performMigrations = async () => {
@@ -95,7 +101,7 @@ const App = () => {
     <AppLockGuard>
       <GestureHandlerRootView style={styles.container}>
         <SafeAreaProvider>
-          <NavigationContainer theme={SuperDarkTheme}>
+          <NavigationContainer ref={navigationRef} theme={SuperDarkTheme}>
             <UnencryptedRealmProvider>
               <SecuredRealmProvider>
                 <GlobalStateProvider>
@@ -115,8 +121,8 @@ const App = () => {
                           <LongPressOverlay />
                         </LongPressProvider>
                       </ErrorBoundary>
-                      <ToastManager />
-                      <AppInBackground />
+                      <ToastManager currentRouteName={currentRouteName as any} />
+                      <AppInBackground appState={appState} />
                     </QueryClientProvider>
                   </RealmQueueProvider>
                 </GlobalStateProvider>

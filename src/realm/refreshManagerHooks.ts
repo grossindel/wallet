@@ -103,7 +103,7 @@ export const useRefreshStateActions = () => {
 
   const realm = useRealm();
   const accountNumber = useCurrentAccountNumber();
-  const timeoutId = useRef<NodeJS.Timeout>();
+  const timeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
   const preventRefresh = useRef(false);
 
   const refreshAll = useCallback(

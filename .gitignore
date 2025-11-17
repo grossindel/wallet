@@ -85,7 +85,7 @@ default.realm.lock
 default.realm.note
 /default.realm.management/
 
- 
+
 # Yarn
 .yarn/*
 !.yarn/patches
@@ -99,3 +99,5 @@ coverage-ts
 
 .env
 .env.storybook
+
+.kotlin/

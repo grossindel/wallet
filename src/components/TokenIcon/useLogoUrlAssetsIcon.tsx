@@ -12,7 +12,7 @@ export const useLogoUrlAssetsIcon = (
   { logoUrl, style }: UseLogoUrlAssetsIconOptions,
   enabled = true,
 ): {
-  icon: JSX.Element | null;
+  icon: React.ReactElement | null;
   error: boolean;
 } => {
   const [hasError, setHasError] = useState(false);

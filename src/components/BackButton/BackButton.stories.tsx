@@ -6,9 +6,8 @@ import { Button } from '../Button';
 
 import { BackButton } from './BackButton';
 
-import type { NativeStackNavigationHelpers } from '@react-navigation/native-stack/lib/typescript/src/types';
-
 import type { Meta, StoryObj } from '@storybook/react';
+import type { NativeStackNavigationHelpers } from 'react-native-screens/lib/typescript/native-stack/types';
 
 const Stack = createNativeStackNavigator();
 

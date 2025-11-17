@@ -1,13 +1,13 @@
 import type React from 'react';
+
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { WithSpringConfig } from 'react-native-reanimated';
 
 import BottomSheetBase, { BottomSheetBackdrop, BottomSheetModal as BottomSheetBaseModal } from '@gorhom/bottom-sheet';
 import { BlurView } from '@react-native-community/blur';
-import { HeaderHeightContext } from '@react-navigation/elements';
-import { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -81,8 +81,6 @@ function useBottomSheetProps<T extends BottomSheetRef | BottomSheetModalRef, Pro
   ref: React.ForwardedRef<T>,
 ) {
   const insets = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
-  const headerHeight = useContext(HeaderHeightContext) ?? 0;
   const [currentIndex, setCurrentIndex] = useState<number>();
   const [, setShowNavTabs] = useGlobalState('showNavTabs');
   const handleChange = useCallback(
@@ -137,7 +135,6 @@ function useBottomSheetProps<T extends BottomSheetRef | BottomSheetModalRef, Pro
     onClose: onDismiss,
     onDismiss,
     onChange: handleAndroidBackButton ? handleChange : onChange,
-    containerHeight: height - headerHeight,
     overDragResistanceFactor: 5,
     containerStyle: styles.shadow,
     ref: sheetRef,

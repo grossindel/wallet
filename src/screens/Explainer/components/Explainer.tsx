@@ -12,7 +12,7 @@ import ethereumAddress from '@/screens/Explainer/images/ethereumAddress.png';
 import loc from '/loc';
 
 type ExplainerProps = {
-  image: JSX.Element | null;
+  image: React.ReactElement | null;
   heading: string;
 };
 const Explainer = ({ image, heading, children }: PropsWithChildren<ExplainerProps>) => {

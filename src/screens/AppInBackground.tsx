@@ -5,7 +5,6 @@ import { FullWindowOverlay } from 'react-native-screens';
 import { GradientMask, GradientScreenView } from '@/components/Gradients';
 import { SvgIcon } from '@/components/SvgIcon';
 import { useTheme } from '@/theme/themes';
-import { useAppState } from '@/utils/useAppState';
 
 import { biometricUnlock } from '/helpers/biometric-unlock';
 import loc from '/loc';
@@ -13,8 +12,11 @@ import BootTime from '/modules/boot-time';
 
 const maxLockTimeWithoutBioCheck = 1000 * 60;
 
-export const AppInBackground = () => {
-  const appState = useAppState();
+interface Props {
+  appState: string;
+}
+
+export const AppInBackground = ({ appState }: Props) => {
   const { colors } = useTheme();
   const [isLocked, setIsLocked] = useState(false);
 

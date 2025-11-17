@@ -51,7 +51,7 @@ export type AssetRowProps = {
     style: StyleProp<ViewStyle>;
     selected: boolean;
     symbolUnderLabel: boolean;
-    tag: JSX.Element;
+    tag: React.ReactElement;
     testID: string;
     walletId: string;
     readonly?: boolean;

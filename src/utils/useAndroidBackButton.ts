@@ -5,8 +5,8 @@ import { BackHandler } from 'react-native';
 export const useAndroidBackButton = (onBackPress: () => boolean) => {
   useFocusEffect(
     useCallback(() => {
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => sub?.remove?.();
     }, [onBackPress]),
   );
 };

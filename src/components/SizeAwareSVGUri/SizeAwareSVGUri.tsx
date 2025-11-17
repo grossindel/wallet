@@ -37,7 +37,11 @@ export const SizeAwareSVGUri: React.FC<SizeAwareSVGUriProps> = ({ uri, onLoad, f
   };
 
   const onContainerLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => setContainerSize(layout);
-  const onSvgLoad = (xml: string) => xml && setViewBox(getViewBox(xml));
+  const onSvgLoad = (xml: string | null) => {
+    if (xml) {
+      setViewBox(getViewBox(xml));
+    }
+  };
 
   const sizeProps = useMemo(() => {
     if (!svgSize || !containerSize || viewBox === undefined) {
@@ -63,7 +67,14 @@ export const SizeAwareSVGUri: React.FC<SizeAwareSVGUriProps> = ({ uri, onLoad, f
 
   return (
     <View style={[styles.svgContainer, containerStyle]} onLayout={svgSize ? undefined : onContainerLayout}>
-      <SvgUri uri={uri} onLoad={onSvgLoad} onLayout={svgSize ? undefined : onSvgLayout} {...props} {...sizeProps} style={[!svgSize && styles.svgHidden]} />
+      <SvgUri
+        uri={uri}
+        onLoad={onSvgLoad as any}
+        onLayout={svgSize ? undefined : onSvgLayout}
+        {...props}
+        {...sizeProps}
+        style={[!svgSize && styles.svgHidden]}
+      />
     </View>
   );
 };

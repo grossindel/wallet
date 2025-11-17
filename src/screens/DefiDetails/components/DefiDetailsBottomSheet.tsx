@@ -94,7 +94,6 @@ export const DefiDetailsBottomSheet = ({ onPositionChange, positionIndex }: Prop
       animateOnMount
       index={defaultSheetPosition}
       dismissible={false}
-      noSafeInsetTop
       noBackdrop
       ref={ref}
       onChange={handleSheetPositionChange}>

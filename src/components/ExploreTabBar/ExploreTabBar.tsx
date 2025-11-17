@@ -19,7 +19,7 @@ const TabBarSizes = {
   width: 212,
   height: 64,
   radius: 70,
-  bottomOffset: 12,
+  bottomOffset: 22,
 };
 
 const tabCount = 3;
@@ -61,14 +61,21 @@ export const ExploreTabBar: FC<ExploreTabBarProps> = ({
   }
 
   return (
-    <View style={[styles.container, { bottom: Math.max(insets.bottom, TabBarSizes.bottomOffset) }]} testID="ExploreTabBar">
+    <View style={[styles.container, { bottom: Math.max(insets.bottom, TabBarSizes.bottomOffset) }]} pointerEvents="box-none" testID="ExploreTabBar">
       <Animated.View style={styles.animatedContainer} entering={FadeInDown.duration(150)} exiting={FadeOutDown.duration(150)}>
         {Platform.OS === 'ios' ? (
-          <BlurView blurType="ultraThinMaterialDark" reducedTransparencyFallbackColor={colors.background} style={[StyleSheet.absoluteFill]} />
+          <BlurView
+            blurType="ultraThinMaterialDark"
+            reducedTransparencyFallbackColor={colors.background}
+            style={[StyleSheet.absoluteFill]}
+            pointerEvents="none"
+          />
         ) : (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.blurBackgroundAndroid }]} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.blurBackgroundAndroid }]} pointerEvents="none" />
         )}
-        <GradientItemBackground style={styles.background} />
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          <GradientItemBackground style={styles.background} />
+        </View>
         <View style={styles.iconContainer}>
           {tabs.map((tab: TabData, index: number) => {
             const iconColor = activeTab === index ? 'light100' : 'light50';
@@ -91,6 +98,7 @@ const styles = StyleSheet.create({
     width: TabBarSizes.width,
     height: TabBarSizes.height,
     zIndex: 1,
+    elevation: 100,
     bottom: TabBarSizes.bottomOffset,
     left: '50%',
     backgroundColor: 'transparent',

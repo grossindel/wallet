@@ -72,7 +72,7 @@ export const ConnectedAppsScreen = ({ navigation, route }: NavigationProps<'Conn
       const session: SessionTypes.Struct | undefined = item.item;
       const { description, icons, name, url } = session?.peer?.metadata ?? {};
       const iconUri = (icons || [])[0] ?? '';
-      const items: JSX.Element[] = [];
+      const items: React.ReactElement[] = [];
 
       loopOverAllSessionNamespaceAccounts(session, (walletString, i) => {
         const network = getNetworkNameFromWalletString(walletString);

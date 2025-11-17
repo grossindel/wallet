@@ -26,19 +26,26 @@ export const LongPressable = ({ children, style, withXPosition, options, onLongP
 
   const handleLongPress = useCallback(() => {
     if (elRef.current) {
+      hapticFeedback.impactHeavy();
+
       elRef.current.measure((_x, _y, _width, _height, pageX, pageY) => {
-        hapticFeedback.impactHeavy();
-        setStyles(style ?? {});
-        setOptions(options);
         onLongPress(children, withXPosition ? pageX : 0, pageY, onLongPressEnd);
-        onLongPressStart?.();
+
+        requestAnimationFrame(() => {
+          setStyles(style ?? {});
+          setOptions(options);
+          onLongPressStart?.();
+        });
       });
     }
   }, [children, onLongPress, onLongPressEnd, onLongPressStart, options, setOptions, setStyles, style, withXPosition]);
 
   const longPress = Gesture.LongPress()
     .minDuration(200)
-    .onStart(() => runOnJS(handleLongPress)());
+    .onStart(() => {
+      'worklet';
+      runOnJS(handleLongPress)();
+    });
 
   return (
     <GestureDetector gesture={longPress}>

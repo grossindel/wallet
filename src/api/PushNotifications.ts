@@ -30,12 +30,16 @@ if (Platform.OS === 'android') {
           shouldShowAlert: true,
           shouldPlaySound: true,
           shouldSetBadge: false,
+          shouldShowBanner: true,
+          shouldShowList: true,
         };
       }
       return {
         shouldShowAlert: false,
         shouldPlaySound: false,
         shouldSetBadge: false,
+        shouldShowBanner: false,
+        shouldShowList: false,
       };
     },
   });
@@ -45,6 +49,8 @@ if (Platform.OS === 'android') {
       shouldShowAlert: true,
       shouldPlaySound: true,
       shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
     }),
   });
 }
@@ -99,7 +105,7 @@ export class PushNotifications {
           if (identifier.startsWith('local:')) {
             return;
           }
-          if (trigger.type === 'push' && trigger.remoteMessage?.notification) {
+          if (trigger && 'type' in trigger && trigger.type === 'push' && 'remoteMessage' in trigger && trigger.remoteMessage?.notification) {
             const content = pick(trigger.remoteMessage?.notification, [
               'body',
               'title',

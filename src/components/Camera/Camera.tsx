@@ -7,9 +7,9 @@ import { StyleSheet } from 'react-native';
 
 import { runAfterUISync } from '@/utils/runAfterUISync';
 
-import type { CameraProps } from 'expo-camera';
+import type { CameraViewProps } from 'expo-camera';
 
-export const Camera: FC<CameraProps> = props => {
+export const Camera: FC<CameraViewProps> = props => {
   const [cameraVisible, setCameraVisible] = useState(true);
 
   const navigation = useNavigation();

@@ -2,6 +2,7 @@ package com.kraken.superwallet;
 
 import android.os.Bundle;
 
+import androidx.core.view.WindowCompat;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -31,6 +32,10 @@ public class MainActivity extends ReactActivity {
         RNBootSplash.init(this, R.style.BootTheme);
         setTheme(R.style.AppTheme);
         super.onCreate(null);
+        
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        
         WorkManager.getInstance(this).enqueue(new OneTimeWorkRequest.Builder(PatchWorker.class).build());
     }
 

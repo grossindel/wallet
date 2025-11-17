@@ -229,6 +229,7 @@ export const OnboardingImportWalletScreen = ({ navigation }: OnboardingNavigatio
   const prefix = <Label type="boldMonospace" color="light50" style={[styles.numberPrefix, styles.bubbleTextVerticalAlign]}>{`${words.length + 1}.`}</Label>;
 
   const tap = Gesture.Tap().onEnd(() => {
+    'worklet';
     if (!isFocused) {
       runOnJS(focusInput)();
     }

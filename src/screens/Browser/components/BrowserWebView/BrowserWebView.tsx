@@ -58,7 +58,7 @@ export const BrowserWebView = forwardRef<BrowserWebViewRef, BrowserWebViewProps>
 
   const secret = useRandomSecret();
 
-  const { onMessage, disconnect } = useDappMethods(webViewRef, secret);
+  const { onMessage, disconnect } = useDappMethods(webViewRef as React.RefObject<WebView>, secret);
 
   const { animatedWebViewStyle } = useBrowserAnimationContext();
 

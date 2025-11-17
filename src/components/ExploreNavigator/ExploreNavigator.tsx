@@ -12,7 +12,7 @@ import { Routes } from '@/Routes';
 
 import type { NavigationState } from '@react-navigation/native';
 
-const getRouteFromState = (state: NavigationState): string => {
+const getRouteFromState = (state: NavigationState | undefined): string => {
   const routes = state?.routes ?? [];
   return routes[routes.length - 1]?.name ?? '';
 };

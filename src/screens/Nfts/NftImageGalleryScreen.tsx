@@ -129,9 +129,9 @@ export const NftImageGalleryScreen = ({ navigation, route }: NavigationProps<'Nf
       onRequestClose();
       return true;
     };
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    const sub = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      sub?.remove?.();
     };
   }, [onRequestClose]);
 
